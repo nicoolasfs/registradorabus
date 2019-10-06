@@ -1,0 +1,61 @@
+//Registradora Bus Intermunicipal
+int contador =0;
+int precio =5200;
+int total;
+const int TriggerPin = PB10;
+const int EchoPin = PB11;
+const int BombilloBlanco= PB6;
+const int BombilloRojo= PB9;
+const int BombilloAmarillo= PB7;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(TriggerPin, OUTPUT);
+  pinMode(EchoPin, INPUT);
+  pinMode(BombilloBlanco,OUTPUT);
+  pinMode(BombilloRojo,OUTPUT);
+  pinMode(BombilloAmarillo,OUTPUT);
+ 
+}
+
+void loop() {
+  int cm = ping(TriggerPin, EchoPin);
+}
+
+int ping(int TriggerPin, int EchoPin) {
+  long duration, distanceCm;
+  
+  digitalWrite(TriggerPin, LOW);  
+  delayMicroseconds(2);
+  digitalWrite(TriggerPin, HIGH);  //generamos Trigger (disparo) de 5ms
+  delayMicroseconds(5);
+  digitalWrite(TriggerPin, LOW);
+  
+  duration = pulseIn(EchoPin, HIGH);  //medimos el tiempo entre pulsos, en microseg
+  
+  distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
+ 
+  if (distanceCm <=20){
+  digitalWrite(BombilloAmarillo,LOW);
+  digitalWrite(BombilloRojo,HIGH);
+ digitalWrite(BombilloBlanco,HIGH);
+ delay(500);
+  digitalWrite(BombilloBlanco,LOW);
+  contador++;
+  total=precio+total;
+  totalidad();
+  delay(500);
+ }
+
+else{
+  digitalWrite(BombilloBlanco,LOW);
+  digitalWrite(BombilloAmarillo,HIGH);
+  digitalWrite(BombilloRojo,LOW);
+}
+}
+void totalidad(){
+   Serial.print("Numero de personas ingresadas: ");
+  Serial.println(contador);
+  Serial.print("El total de tiquetes es de: ");
+  Serial.println(total);
+}
